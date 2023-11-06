@@ -1,5 +1,4 @@
 import pyautogui
-import pygetwindow as gw
 import time
 import serial
 
@@ -13,4 +12,6 @@ while True:
         pyautogui.moveTo(x=80, y=580 )
         time.sleep(0.3)
         arduino.write(b'a')
-        time.sleep(0.3)
+        time.sleep(0.5)
+        pyautogui.moveTo(x=80, y=450 )
+        pyautogui.moveTo(x=90,y=440)
