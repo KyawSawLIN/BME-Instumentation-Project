@@ -5,6 +5,7 @@
 const int switchPin = 12;    // switch to turn on and off mouse control
 const int mouseButton = 3;  // input pin for the mouse pushButton
 const int deleteButton = 2;  // backspace button
+const int special = 4;
 const int xAxis = A0;       // joystick X axis
 const int yAxis = A1;       // joystick Y axis
 const int ledPin = 13;       // Mouse control LED
@@ -21,13 +22,15 @@ char backspace = KEY_BACKSPACE;
 
 
 void setup() {
+  Serial.begin(9600);
   pinMode(switchPin, INPUT_PULLUP);  // the switch pin
   pinMode(mouseButton, INPUT_PULLUP);
   pinMode(ledPin, OUTPUT);
- 
+
   // take control of the mouse:
   Mouse.begin();
   Keyboard.begin();
+
 }
 
 void loop() {
@@ -40,15 +43,15 @@ void loop() {
   }
   lastSwitchState = switchState;
 
-  
 
   int xReading = readAxis(A0);
   int yReading = readAxis(A1);
 
+
   if (mouseIsActive) {
     Mouse.move(xReading, -yReading, 0);
   }
-  
+
   if (digitalRead(mouseButton) == LOW) {
     if (!Mouse.isPressed(MOUSE_LEFT)) {
       Mouse.press(MOUSE_LEFT);
@@ -60,7 +63,31 @@ void loop() {
     }
   }
 
-  
+  if (digitalRead(special) == LOW)
+  {
+    delay(500);
+    Serial.println("a");
+  }
+
+  if (Serial.available())
+  {
+    char mesg = Serial.read();
+
+     if (mesg == 'a')
+     {
+    if (!Mouse.isPressed(MOUSE_LEFT)) {
+      Mouse.press(MOUSE_LEFT);
+    }
+  }
+  else {
+    if (Mouse.isPressed(MOUSE_LEFT)) {
+      Mouse.release(MOUSE_LEFT);
+    }
+
+     }
+}
+
+
   if ( digitalRead(deleteButton) == LOW)
   {
     delay(200);
@@ -68,7 +95,7 @@ void loop() {
     Keyboard.release(backspace);
     delay(10);
   }
-  
+
 
   delay(responseDelay);
 }
@@ -89,4 +116,4 @@ int readAxis(int thisAxis) {
 
   // return the distance for this axis:
   return distance;
-}  
+}
