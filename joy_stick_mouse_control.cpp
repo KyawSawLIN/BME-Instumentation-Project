@@ -6,9 +6,10 @@ const int switchPin = 12;    // switch to turn on and off mouse control
 const int mouseButton = 3;  // input pin for the mouse pushButton
 const int deleteButton = 2;  // backspace button
 const int special = 4;
+const int spacebar = 5;
 const int xAxis = A0;       // joystick X axis
 const int yAxis = A1;       // joystick Y axis
-const int ledPin = 13;       // Mouse control LED
+const int ledPin = 13;   
 
 // parameters for reading the joystick:
 int range = 3;             // output range of X or Y movement
@@ -87,7 +88,6 @@ void loop() {
      }
 }
 
-
   if ( digitalRead(deleteButton) == LOW)
   {
     delay(200);
@@ -96,6 +96,13 @@ void loop() {
     delay(10);
   }
 
+  if (digitalRead(spacebar) == LOW)
+  {
+    delay(500);
+    Keyboard.press(' ');
+    Keyboard.release(' ');
+    delay(50);
+  }
 
   delay(responseDelay);
 }
